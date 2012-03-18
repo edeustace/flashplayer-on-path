@@ -1,0 +1,68 @@
+#!/usr/bin/env bash 
+
+if [ -n "$1" ]
+# Test whether command-line argument is present (non-empty).
+then
+    command=$1
+else
+    command="add"
+fi
+
+HOME=~
+ROOT_PATH="$HOME/.flash_player_path"
+DEST_PATH="$ROOT_PATH/flash_player"
+FLASH_NAME="flashplayer_10_sa_debug.app.zip"
+
+APP_PATH="Flash Player Debugger.app/Contents/MacOS"
+ECHO_APP_PATH="Flash\ Player\ Debugger.app/Contents/MacOS"
+
+function ensure_app_is_flash_player {
+  if [ -f "$DEST_PATH/$APP_PATH/Flash Player" ]
+    then echo "do nothing"
+    else 
+        echo "renaming app"
+        cd "$DEST_PATH/$APP_PATH"
+        cp "Flash Player Debugger" "Flash Player"
+  fi
+}
+
+case $command in
+
+help)
+    echo "--"
+    echo "run (add|remove|help)"
+    echo "> add - add flash player to your path"
+    echo "> remove - remove flash player from your path"
+    echo "> help"
+    echo "--"
+    ;;
+add)
+    mkdir -pv $DEST_PATH
+    cd $DEST_PATH
+    curl -O "http://download.macromedia.com/pub/flashplayer/updaters/10/$FLASH_NAME"
+    echo "now here: "
+    pwd
+    tar xvf $FLASH_NAME
+
+    #Note 2: On Mac OS, add /${flashplayer.dir}/Flash Player.app/Contents/MacOS/ folder to PATH.
+    cp ~/.bash_profile $ROOT_PATH/.bash_profile.backup
+    cp ~/.zshrc $ROOT_PATH/.zshrc.backup
+    
+    ensure_app_is_flash_player
+
+    echo "export PATH=\$PATH:$DEST_PATH/$ECHO_APP_PATH" >> ~/.bash_profile
+    echo "export PATH=\$PATH:$DEST_PATH/$ECHO_APP_PATH" >> ~/.zshrc
+    echo "done - reload your source"
+    ;;
+remove)
+    
+    echo "removing..."
+    cp ~/$ROOT_PATH/.bash_profile.backup ~/.bash_profile
+    cp ~/$ROOT_PATH/.zshrc.backup ~/.zshrc
+    rm -fr $ROOT_PATH
+    ;;
+esac
+exit 0
+
+
+

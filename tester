@@ -1,0 +1,11 @@
+#!/usr/bin/env bash 
+
+if [ -n "$1" ]
+# Test whether command-line argument is present (non-empty).
+then
+    command=$1
+else
+    command="add"
+fi
+echo "test:"
+echo $command
