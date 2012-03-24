@@ -37,14 +37,16 @@ help)
     echo "--"
     ;;
 add)
-    mkdir -pv $DEST_PATH
+    echo "=================================================="
+    echo "========flash-player-on-path::ADD================="
+    echo "installing directory: $DEST_PATH"
+    echo "=================================================="
+    mkdir -p $DEST_PATH
     cd $DEST_PATH
     curl -O "http://download.macromedia.com/pub/flashplayer/updaters/10/$FLASH_NAME"
-    echo "now here: "
-    pwd
     tar xvf $FLASH_NAME
 
-    #Note 2: On Mac OS, add /${flashplayer.dir}/Flash Player.app/Contents/MacOS/ folder to PATH.
+
     cp ~/.bash_profile $ROOT_PATH/.bash_profile.backup
     cp ~/.zshrc $ROOT_PATH/.zshrc.backup
     
@@ -52,14 +54,17 @@ add)
 
     echo "export PATH=\$PATH:$DEST_PATH/$ECHO_APP_PATH" >> ~/.bash_profile
     echo "export PATH=\$PATH:$DEST_PATH/$ECHO_APP_PATH" >> ~/.zshrc
-    echo "done - reload your source"
+    echo "done - reload your source, on OS X run 'Flash\\ Player'"
+    echo "=================================================="
     ;;
 remove)
-    
-    echo "removing..."
-    cp ~/$ROOT_PATH/.bash_profile.backup ~/.bash_profile
-    cp ~/$ROOT_PATH/.zshrc.backup ~/.zshrc
+    echo "=================================================="
+    echo "========flash-player-on-path::REMOVE=============="
+    echo "removing 'export line from .bash_profile and .zshrc'"
+    sed -in 's/export PATH.*\.flash_player_path.*//g' $HOME/.bash_profile
+    sed -in 's/export PATH.*\.flash_player_path.*//g' $HOME/.zshrc
     rm -fr $ROOT_PATH
+    echo "=================================================="
     ;;
 esac
 exit 0
