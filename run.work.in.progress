@@ -1,0 +1,120 @@
+#!/usr/bin/env bash 
+
+source core.sh
+echo "=================================================="
+echo "OS: $OS"
+echo "=================================================="
+
+LINUX_FLASH_NAME="flash_player_10_linux_dev.tar.gz"
+LINUX_FLASH_URL="http://download.macromedia.com/pub/flashplayer/updaters/10/$LINUX_FLASH_NAME"
+
+MAC_FLASH_NAME="flashplayer_10_sa_debug.app.zip"
+MAC_FLASH_URL="http://download.macromedia.com/pub/flashplayer/updaters/10/$FLASH_NAME"
+
+if [[ $OS = "linux" ]]; then
+  FLASH_NAME=$LINUX_FLASH_NAME
+  FLASH_URL=$LINUX_FLASH_URL
+  APP_PATH="flashplayer"
+  ECHO_APP_PATH="flashplayer"
+  DONE_MESSAGE="done - reload your source file then run 'flashplayer'"
+fi
+
+
+if [[ $OS = "mac" ]]; then
+  FLASH_NAME=$MAC_FLASH_NAME
+  FLASH_URL=$MAC_FLASH_URL
+  APP_PATH="Flash Player Debugger.app/Contents/MacOS"
+  ECHO_APP_PATH="Flash\ Player\ Debugger.app/Contents/MacOS"
+  DONE_MESSAGE="done - reload your source, then run 'Flash\\ Player'"
+fi
+
+echo "FLASH_NAME: $FLASH_NAME"
+echo "FLASH_URL: $FLASH_URL"
+echo "APP_PATH: $APP_PATH"
+
+if [ -n "$1" ]
+# Test whether command-line argument is present (non-empty).
+then
+    command=$1
+else
+    command="add"
+fi
+
+HOME=~
+ROOT_PATH="$HOME/.flash_player_path"
+DEST_PATH="$ROOT_PATH/flash_player"
+
+
+function ensure_app_is_flash_player {
+  if [ -f "$DEST_PATH/$APP_PATH/Flash Player" ]
+    then echo "do nothing"
+    else 
+        echo "renaming app"
+        cd "$DEST_PATH/$APP_PATH"
+        cp "Flash Player Debugger" "Flash Player"
+  fi
+}
+#TODO: - apt-get install ia32-libs so flash player can run
+function extract_archive_and_mv_player {
+
+    tar xvf $FLASH_NAME
+    if [[ $OS = "mac" ]]; then
+      ensure_app_is_flash_player
+    fi
+    
+    if [[ $OS = "linux" ]]; then
+      STRIPPED=${FLASH_NAME//.tar.gz/}
+      tar xvf "$STRIPPED/standalone/debugger/flashplayer.tar.gz"
+      #TODO: mv - stat error happening here?
+      mv -v $STRIPPED/standalone/debugger/flashplayer
+      chmod +x flashplayer
+      #rm -fr $STRIPPED
+      #rm $FLASH_NAME
+    fi
+}
+
+case $command in
+
+help)
+    echo "--"
+    echo "run (add|remove|help)"
+    echo "> add - add flash player to your path"
+    echo "> remove - remove flash player from your path"
+    echo "> help"
+    echo "--"
+    ;;
+add)
+    echo "=================================================="
+    echo "========flash-player-on-path::ADD================="
+    echo "installing directory: $DEST_PATH"
+    echo "=================================================="
+    mkdir -p $DEST_PATH
+    cd $DEST_PATH
+    curl -O $FLASH_URL
+
+    extract_archive_and_mv_player
+
+    cp ~/.bash_profile $ROOT_PATH/.bash_profile.backup
+    cp ~/.zshrc $ROOT_PATH/.zshrc.backup
+
+    EXPORT_PATH="export PATH=\$PATH:$DEST_PATH/$ECHO_APP_PATH"
+    echo "Adding [$EXPORT_PATH] to profile"
+    echo "$EXPORT_PATH" >> ~/.bash_profile
+    echo "$EXPORT_PATH" >> ~/.zshrc
+    echo "$DONE_MESSAGE"
+    echo "=================================================="
+    ;;
+remove)
+    echo "=================================================="
+    echo "========flash-player-on-path::REMOVE=============="
+    echo "removing 'export line from .bash_profile and .zshrc'"
+    sed -in 's/export PATH.*\.flash_player_path.*//g' $HOME/.bash_profile
+    sed -in 's/export PATH.*\.flash_player_path.*//g' $HOME/.zshrc
+    rm -fr $ROOT_PATH
+    echo "=================================================="
+    ;;
+esac
+exit 0
+
+
+
