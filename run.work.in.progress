@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
 #source core.sh
-source < (curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/core.sh )
+source < <(curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/core.sh )
 echo "=================================================="
 echo "OS: $OS"
 echo "DIST: $DIST"
