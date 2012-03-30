@@ -1,5 +1,6 @@
-#!/usr/bin/env bash 
+#!/usr/bin/env bash
+echo "begin loading source"
 source <(curl https://raw.github.com/edeustace/flashplayer-on-path/master/mac/loaded)
-
+sleep 2
 echo "loaded item"
 echo "$test_var"
