@@ -1,2 +1,5 @@
 #!/usr/bin/env bash 
-source <(curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/loaded )
+source <(curl https://raw.github.com/edeustace/flashplayer-on-path/master/mac/loaded)
+
+echo "loaded item"
+echo "$test_var"
