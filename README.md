@@ -14,5 +14,5 @@ Its creating a folder ````~/.flash_player_path/flash_player```` and adding the A
     bash -s remove < <(curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/run )
 Its removing the references to flash player from ````~/.bash_profile```` and ````~/.zshrc```` and deleting the folder
 
-# Run Work in Progress (works in Ubuntu)
+## Run Work in Progress (works in Ubuntu)
     bash -s < <(curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/run.work.in.progress )
