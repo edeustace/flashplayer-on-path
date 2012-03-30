@@ -1,6 +1,7 @@
 #!/usr/bin/env bash 
 
-source core.sh
+#source core.sh
+source < (curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/core.sh )
 echo "=================================================="
 echo "OS: $OS"
 echo "DIST: $DIST"
@@ -11,11 +12,13 @@ echo "MACH: $MACH"
 echo "=================================================="
 
 if [[ $OS = "linux" ]]; then
-  source os_linux.sh
+  #source os_linux.sh
+  source < (curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/os_linux.sh )
 fi
 
 if [[ $OS = "mac" ]]; then
-  source os_mac.sh
+  #source os_mac.sh
+  source < (curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/os_mac.sh )
 fi
 
 
