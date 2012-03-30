@@ -81,6 +81,8 @@ remove)
 esac
 
 
-rm __tmp.*
+rm -f __tmp.core.sh
+rm -f __tmp.os_linux.sh
+rm -f __tmp.os_mac.sh
 
 exit 0
