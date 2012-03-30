@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-echo "start"
-curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/mac/loaded -o _temp.loaded
-source _temp.loaded
-echo "loaded item"
-echo "$test_var"
