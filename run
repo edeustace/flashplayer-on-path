@@ -21,6 +21,11 @@ if [[ $OS = "mac" ]]; then
   source __tmp.os_mac.sh
 fi
 
+if [[ $OS = "Darwin" ]]; then
+  curl -s https://raw.github.com/edeustace/flashplayer-on-path/master/os_mac.sh -o __tmp.os_mac.sh
+  source __tmp.os_mac.sh
+fi
+
 
 if [ -n "$1" ]
 # Test whether command-line argument is present (non-empty).
